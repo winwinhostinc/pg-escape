@@ -117,15 +117,17 @@ exports.ident = function(val){
  */
 
 exports.literal = function(val){
-  if (null == val) return 'NULL';
+  if (val === null || val === undefined) return 'NULL';
   if (Array.isArray(val)) {
     var vals = val.map(exports.literal)
     return "(" + vals.join(", ") + ")"
   }
-  var backslash = ~val.indexOf('\\');
+  var backslash = (val.indexOf) ? ~val.indexOf('\\') :null;
   var prefix = backslash ? 'E' : '';
-  val = val.replace(/'/g, "''");
-  val = val.replace(/\\/g, '\\\\');
+  if(val.replace){
+    val = val.replace(/'/g, "''");
+    val = val.replace(/\\/g, '\\\\');
+  }
   return prefix + "'" + val + "'";
 };
 
